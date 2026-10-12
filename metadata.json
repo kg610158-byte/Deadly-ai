@@ -1,0 +1,6 @@
+{
+  "name": "DEADLY AI",
+  "description": "Futuristic AI Assistant inspired by Iron Man with voice conversation, offline engine, and Android device integrations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
