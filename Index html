@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEADLY AI</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#070b12;color:#f4f4f4;
+ font-family:Arial,sans-serif;min-height:100vh;
+ display:flex;flex-direction:column;
+}
+header{
+ padding:20px;text-align:center;
+ border-bottom:1px solid #473514;
+ color:#ffbd45;letter-spacing:4px;font-weight:bold;
+}
+main{
+ width:100%;max-width:650px;margin:auto;
+ padding:25px 18px;flex:1;
+ display:flex;flex-direction:column;align-items:center;
+}
+.orb{
+ width:155px;height:155px;border-radius:50%;
+ margin:35px auto;
+ background:radial-gradient(circle,#fff2b0 0%,#ffb52e 12%,#9b5710 42%,#111827 70%);
+ box-shadow:0 0 25px #ffad32,0 0 65px #a85b16;
+ animation:pulse 3s infinite;
+}
+@keyframes pulse{
+ 50%{transform:scale(1.06);box-shadow:0 0 45px #ffbd45,0 0 90px #a85b16}
+}
+h1{color:#ffbd45;letter-spacing:3px}
+.status{color:#aaa;font-size:13px}
+.chat{
+ width:100%;min-height:230px;max-height:350px;
+ overflow-y:auto;border:1px solid #51401f;
+ border-radius:14px;padding:15px;margin-top:20px;
+ background:#0d1420;
+}
+.msg{padding:10px 12px;margin:8px 0;border-radius:10px;line-height:1.5}
+.ai{background:#192333;color:#ffd27c}
+.user{background:#493313;text-align:right}
+.controls{display:flex;width:100%;gap:8px;margin-top:15px}
+input{
+ flex:1;min-width:0;padding:14px;border-radius:10px;
+ border:1px solid #80602b;background:#111927;color:white;
+}
+button{
+ border:0;border-radius:10px;padding:13px 17px;
+ background:#e99b27;color:#111;font-weight:bold;
+}
+footer{padding:15px;text-align:center;color:#777;font-size:12px}
+</style>
+</head>
+<body>
+<header>DEADLY AI</header>
+<main>
+ <div class="orb"></div>
+ <h1>DEADLY AI</h1>
+ <p class="status">PERSONAL AI ASSISTANT · INITIAL INTERFACE</p>
+ <div class="chat" id="chat">
+  <div class="msg ai">
+   Welcome, Mr. Kunal. DEADLY AI interface is ready.<br>
+   AI connection is not configured yet.
+  </div>
+ </div>
+ <div class="controls">
+  <input id="message" placeholder="Type your message..." />
+  <button onclick="sendMessage()">SEND</button>
+ </div>
+</main>
+<footer>DEADLY AI · YOUR PERSONAL ASSISTANT</footer>
+<script>
+function sendMessage(){
+ const input=document.getElementById("message");
+ const chat=document.getElementById("chat");
+ const value=input.value.trim();
+ if(!value)return;
+ const user=document.createElement("div");
+ user.className="msg user";
+ user.textContent=value;
+ chat.appendChild(user);
+ const reply=document.createElement("div");
+ reply.className="msg ai";
+ reply.textContent="Your interface is working. The AI backend is not connected yet.";
+ chat.appendChild(reply);
+ input.value="";
+ chat.scrollTop=chat.scrollHeight;
+}
+document.getElementById("message").addEventListener("keydown",function(e){
+ if(e.key==="Enter")sendMessage();
+});
+</script>
+</body>
+</html>
