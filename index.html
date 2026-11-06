@@ -8,91 +8,194 @@
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;background:#070b12;color:#f4f4f4;
- font-family:Arial,sans-serif;min-height:100vh;
- display:flex;flex-direction:column;
+  margin:0;min-height:100vh;background:#080b10;color:#f4f4f4;
+  font-family:Arial,sans-serif;display:flex;flex-direction:column
 }
 header{
- padding:20px;text-align:center;
- border-bottom:1px solid #473514;
- color:#ffbd45;letter-spacing:4px;font-weight:bold;
+  padding:18px 16px;text-align:center;border-bottom:1px solid #29251a;
+  color:#ffbd38;font-weight:bold;letter-spacing:3px;font-size:22px
 }
-main{
- width:100%;max-width:650px;margin:auto;
- padding:25px 18px;flex:1;
- display:flex;flex-direction:column;align-items:center;
-}
+.status{font-size:12px;color:#aaa;letter-spacing:1px;margin-top:7px}
+.orb-area{display:flex;justify-content:center;padding:25px 0 15px}
 .orb{
- width:155px;height:155px;border-radius:50%;
- margin:35px auto;
- background:radial-gradient(circle,#fff2b0 0%,#ffb52e 12%,#9b5710 42%,#111827 70%);
- box-shadow:0 0 25px #ffad32,0 0 65px #a85b16;
- animation:pulse 3s infinite;
+  width:105px;height:105px;border-radius:50%;
+  background:radial-gradient(circle,#fff2b0 0%,#ffbd38 18%,#d66b00 48%,#241306 72%);
+  box-shadow:0 0 25px #ff9d24,0 0 60px #a94c00;
+  animation:pulse 2.5s infinite
 }
 @keyframes pulse{
- 50%{transform:scale(1.06);box-shadow:0 0 45px #ffbd45,0 0 90px #a85b16}
+  50%{transform:scale(1.07);box-shadow:0 0 40px #ffbd38,0 0 80px #a94c00}
 }
-h1{color:#ffbd45;letter-spacing:3px}
-.status{color:#aaa;font-size:13px}
-.chat{
- width:100%;min-height:230px;max-height:350px;
- overflow-y:auto;border:1px solid #51401f;
- border-radius:14px;padding:15px;margin-top:20px;
- background:#0d1420;
+main{width:100%;max-width:800px;margin:auto;padding:12px;flex:1;display:flex;flex-direction:column}
+.controls{display:flex;gap:9px;margin-bottom:12px}
+select{
+  flex:1;min-width:0;background:#171b22;color:#ffbd38;
+  border:1px solid #59421f;border-radius:10px;padding:12px
 }
-.msg{padding:10px 12px;margin:8px 0;border-radius:10px;line-height:1.5}
-.ai{background:#192333;color:#ffd27c}
-.user{background:#493313;text-align:right}
-.controls{display:flex;width:100%;gap:8px;margin-top:15px}
+#chat{
+  flex:1;min-height:250px;max-height:48vh;overflow-y:auto;
+  background:#10151c;border:1px solid #282e37;border-radius:14px;
+  padding:14px
+}
+.msg{padding:12px 14px;margin:9px 0;border-radius:12px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.bot{background:#202630;border-left:3px solid #ffad27}
+.user{background:#382817;border-right:3px solid #ffad27;text-align:right}
+#typing{color:#ffbd38;font-size:13px;padding:8px;display:none}
+.composer{display:flex;gap:8px;margin-top:12px}
 input{
- flex:1;min-width:0;padding:14px;border-radius:10px;
- border:1px solid #80602b;background:#111927;color:white;
+  flex:1;min-width:0;background:#171b22;color:white;
+  border:1px solid #444;border-radius:12px;padding:14px;font-size:15px
 }
 button{
- border:0;border-radius:10px;padding:13px 17px;
- background:#e99b27;color:#111;font-weight:bold;
+  background:#ffad27;color:#17100a;border:0;border-radius:12px;
+  padding:0 18px;font-weight:bold;font-size:15px
 }
-footer{padding:15px;text-align:center;color:#777;font-size:12px}
+button:disabled{opacity:.5}
+.note{text-align:center;color:#777;font-size:11px;padding:12px}
 </style>
 </head>
 <body>
-<header>DEADLY AI</header>
+<header>
+  DEADLY AI
+  <div class="status" id="status">INITIALIZING SYSTEM...</div>
+</header>
+
+<div class="orb-area"><div class="orb"></div></div>
+
 <main>
- <div class="orb"></div>
- <h1>DEADLY AI</h1>
- <p class="status">PERSONAL AI ASSISTANT · INITIAL INTERFACE</p>
- <div class="chat" id="chat">
-  <div class="msg ai">
-   Welcome, Mr. Kunal. DEADLY AI interface is ready.<br>
-   AI connection is not configured yet.
+  <div class="controls">
+    <select id="provider">
+      <option value="groq">Groq AI</option>
+      <option value="gemini">Google Gemini</option>
+      <option value="openai">OpenAI</option>
+      <option value="claude">Claude</option>
+      <option value="xai">Grok</option>
+    </select>
+    <select id="model">
+      <option value="">Default model</option>
+    </select>
   </div>
- </div>
- <div class="controls">
-  <input id="message" placeholder="Type your message..." />
-  <button onclick="sendMessage()">SEND</button>
- </div>
+
+  <div id="chat">
+    <div class="msg bot">Hello! DEADLY AI online. Select an AI provider and send your first message.</div>
+  </div>
+  <div id="typing">DEADLY AI is thinking...</div>
+
+  <div class="composer">
+    <input id="message" type="text" placeholder="Message DEADLY AI..." autocomplete="off">
+    <button id="send">SEND</button>
+  </div>
+  <div class="note">DEADLY AI • AI CONNECTION TEST</div>
 </main>
-<footer>DEADLY AI · YOUR PERSONAL ASSISTANT</footer>
+
 <script>
-function sendMessage(){
- const input=document.getElementById("message");
- const chat=document.getElementById("chat");
- const value=input.value.trim();
- if(!value)return;
- const user=document.createElement("div");
- user.className="msg user";
- user.textContent=value;
- chat.appendChild(user);
- const reply=document.createElement("div");
- reply.className="msg ai";
- reply.textContent="Your interface is working. The AI backend is not connected yet.";
- chat.appendChild(reply);
- input.value="";
- chat.scrollTop=chat.scrollHeight;
+const chat = document.getElementById("chat");
+const input = document.getElementById("message");
+const sendBtn = document.getElementById("send");
+const providerSelect = document.getElementById("provider");
+const modelSelect = document.getElementById("model");
+const typing = document.getElementById("typing");
+const statusText = document.getElementById("status");
+
+function addMessage(text, type){
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
 }
-document.getElementById("message").addEventListener("keydown",function(e){
- if(e.key==="Enter")sendMessage();
+
+async function checkBackend(){
+  try{
+    const response = await fetch("/api/health");
+    if(!response.ok) throw new Error("Backend unavailable");
+    const data = await response.json();
+    statusText.textContent = "SYSTEM ONLINE";
+  }catch(error){
+    statusText.textContent = "BACKEND NOT CONNECTED";
+  }
+}
+
+async function loadModels(){
+  modelSelect.innerHTML = '<option value="">Default model</option>';
+  try{
+    const response = await fetch("/api/providers");
+    if(!response.ok) return;
+    const data = await response.json();
+    const providers = data.providers || data;
+    const selected = providers[providerSelect.value];
+    if(selected && selected.models){
+      selected.models.forEach(model => {
+        const option = document.createElement("option");
+        option.value = model;
+        option.textContent = model;
+        modelSelect.appendChild(option);
+      });
+    }
+  }catch(error){
+    console.log("Using default model list");
+  }
+}
+
+async function sendMessage(){
+  const message = input.value.trim();
+  if(!message) return;
+
+  const provider = providerSelect.value;
+  const model = modelSelect.value;
+
+  addMessage(message,"user");
+  input.value = "";
+  sendBtn.disabled = true;
+  typing.style.display = "block";
+
+  try{
+    const response = await fetch("/api/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        provider:provider,
+        message:message,
+        model:model || undefined
+      })
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || data.message || "AI request failed");
+    }
+
+    const answer =
+      data.reply ||
+      data.answer ||
+      data.response ||
+      data.message ||
+      data.text ||
+      (data.content && typeof data.content === "string" ? data.content : null) ||
+      (Array.isArray(data.content) ? data.content.map(x=>x.text || "").join("\n") : null) ||
+      (data.candidates?.[0]?.content?.parts?.map(x=>x.text || "").join("\n")) ||
+      "The server responded, but no readable answer was received.";
+
+    addMessage(answer,"bot");
+
+  }catch(error){
+    addMessage("Connection error: " + error.message,"bot");
+  }finally{
+    typing.style.display = "none";
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+sendBtn.addEventListener("click",sendMessage);
+input.addEventListener("keydown",event=>{
+  if(event.key === "Enter") sendMessage();
 });
+providerSelect.addEventListener("change",loadModels);
+
+checkBackend();
+loadModels();
 </script>
 </body>
 </html>
