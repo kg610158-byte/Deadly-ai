@@ -221,8 +221,4 @@ app.listen(PORT, () => {
   console.log("DEADLY AI running on port " + PORT);
 
 
-  {
-  "status": "online",
-  "version": "2.0"
-}
-});
+  
