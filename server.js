@@ -220,5 +220,5 @@ app.post("/api/chat", async (req, res) => {
 app.listen(PORT, () => {
   console.log("DEADLY AI running on port " + PORT);
 
-
+});
   
